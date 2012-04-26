@@ -5,11 +5,15 @@ function love.load()
 	plane.x = 20
 	plane.y = 20
 	plane.speed = 10
-	plane.maxSpeed = 15
+	plane.maxSpeed = 20
 	plane.dx = 0
 	plane.dy = 0
 	plane.rotation = 0
-	plane.turnRate = 60
+	plane.turnRate = 100
+
+	gravity = 1.005
+	friction = 0.995
+	lift = 1.005
 
 	ting = 0
 	frames = 0
@@ -28,20 +32,32 @@ function love.update(dt)
 		frames = 0
 		ting = 0
 	end
+	if love.keyboard.isDown("up") then
+	else
+		if plane.speed > 0 then
+			plane.speed = plane.speed * friction
+		end
+	end
 	local a = math.rad(plane.rotation)
 	plane.dy = plane.speed*math.sin(a)
 	plane.dx = plane.speed*math.cos(a)
+	
+	plane.dy = plane.dy + 10
+	plane.rotation = math.deg(math.asin(plane.dy/plane.speed))
+
 	plane.x = plane.x + plane.dx*dt*plane.speed
 	plane.y = plane.y + plane.dy*dt*plane.speed
+	
 
-	if plane.x > 1008 then
-		plane.y = 16
-	elseif plane.x < 16 then
-		plane.x = 1008
+	if plane.x > 1040 then
+		plane.x = -16
+	elseif plane.x < -16 then
+		plane.x = 1040
 	end
 end
 
 function love.draw()
 	love.graphics.draw(planeImg, plane.x, plane.y, math.rad(plane.rotation), 2, 2, 20, 16)
 	love.graphics.print("fps: "..fps, 40, 25)
+	love.graphics.print("rotation: "..plane.speed, 40, 40)
 end

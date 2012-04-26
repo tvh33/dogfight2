@@ -4,8 +4,14 @@ end
 function checkKeys(dt)
 	if love.keyboard.isDown("up") then
 		plane.speed = plane.speed + 10*dt
+		if plane.speed > plane.maxSpeed then
+			plane.speed = plane.maxSpeed			
+		end
 	elseif love.keyboard.isDown("down") then
 		plane.speed = plane.speed - 10*dt
+		if plane.speed < 0 then		
+			plane.speed = 0
+		end
 	end
 	if love.keyboard.isDown("right") then
 		plane.rotation = plane.rotation + plane.turnRate*dt
